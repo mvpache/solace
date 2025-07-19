@@ -9,7 +9,8 @@
 
 - [ ] Hydration error on load
 - [ ] We double call api/advocates on load
-- [ ] Missing Key in list
-- [ ] Advocate Type errors
+- [x] Missing Key in list
+- [x] Advocate Type errors
 - [ ] We are setting innerHTML
 - [ ] Design Refresh
+- [ ] Individual search fields
