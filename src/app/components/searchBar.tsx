@@ -27,7 +27,7 @@ export default function SearchBar({ onChange, onClickReset }: SearchProps) {
       />
       </div>
  
-      <button onClick={onClickReset}>Reset Search</button>
+      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onClick={onClickReset}>Reset Search</button>
     </div>
   );
 }
