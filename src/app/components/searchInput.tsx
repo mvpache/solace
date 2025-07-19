@@ -12,7 +12,7 @@ export default function SearchInput({
   onChange,
 }: SearchInputProps) {
   return (
-    <>
+    <div className="flex flex-col">
       <p>
         {label}:<span id="search-term"></span>
       </p>
@@ -22,6 +22,6 @@ export default function SearchInput({
         name={name}
         onChange={onChange}
       />
-    </>
+    </ div>
   );
 }

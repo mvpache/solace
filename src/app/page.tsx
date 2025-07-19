@@ -7,7 +7,6 @@ import { on } from "events";
 
 export default function Home() {
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
-  const [filteredAdvocates, setFilteredAdvocates] = useState<Advocate[]>([]);
   const [firstNameSearch, setFirstNameSearch] = useState("");
   const [lastNameSearch, setLastNameSearch] = useState("");
   const [citySearch, setCitySearch] = useState("");
@@ -17,30 +16,43 @@ export default function Home() {
 
   useEffect(() => {
     console.log("fetching advocates...");
-    fetch("/api/advocates").then((response) => {
-      response.json().then((jsonResponse) => {
-        setAdvocates(jsonResponse.data);
-        setFilteredAdvocates(jsonResponse.data);
-      });
-    });
+    fetchAdvocates();
   }, []);
 
   useEffect(() => {
-    console.log("filtering advocates...");
-    const filteredAdvocates = advocates.filter((advocate) => {
-      return (
-        advocate.firstName.includes(firstNameSearch) ||
-        advocate.lastName.includes(lastNameSearch) ||
-        advocate.city.includes(citySearch) ||
-        advocate.degree.includes(degreeSearch) ||
-        advocate.specialties.includes(specialtiesSearch) ||
-        advocate.yearsOfExperience >= yearsOfExperienceSearch
-      );
-    });
+    console.log("fetching advocates...");
+    let queryParams = "?";
+    if (firstNameSearch.length > 0) {
+      queryParams += `firstName=${firstNameSearch}&`;
+    }
 
-    console.log(filteredAdvocates)
+    if (lastNameSearch.length > 0) {
+      queryParams += `lastName=${lastNameSearch}&`;
+    }
 
-    setFilteredAdvocates(filteredAdvocates);
+    if (citySearch.length > 0) {
+      queryParams += `city=${citySearch}&`;
+    }
+
+    if (degreeSearch.length > 0) {
+      queryParams += `degree=${degreeSearch}&`;
+    }
+
+    if (specialtiesSearch.length > 0) {
+      queryParams += `specialties=${specialtiesSearch}&`;
+    }
+
+    if (yearsOfExperienceSearch > 0) {
+      queryParams += `yearsOfExperience=${yearsOfExperienceSearch}&`;
+    }
+
+    if (queryParams.length > 1) {
+      fetch(`/api/advocates${queryParams}`).then((response) => {
+        response.json().then((jsonResponse) => {
+          setAdvocates(jsonResponse.data);
+        });
+      });
+    }
   }, [
     firstNameSearch,
     lastNameSearch,
@@ -48,12 +60,19 @@ export default function Home() {
     degreeSearch,
     specialtiesSearch,
     yearsOfExperienceSearch,
-    advocates,
   ]);
+
+  const fetchAdvocates = () => {
+    fetch("/api/advocates").then((response) => {
+      response.json().then((jsonResponse) => {
+        setAdvocates(jsonResponse.data);
+      });
+    });
+  };
 
   const onClickReset = () => {
     console.log(advocates);
-    setFilteredAdvocates(advocates);
+    fetchAdvocates();
   };
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -103,7 +122,7 @@ export default function Home() {
           </tr>
         </thead>
         <tbody>
-          {filteredAdvocates.map((advocate) => {
+          {advocates.map((advocate) => {
             return (
               <tr key={advocate.id}>
                 <td>{advocate.firstName}</td>

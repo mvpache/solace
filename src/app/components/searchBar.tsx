@@ -9,7 +9,8 @@ export default function SearchBar({ onChange, onClickReset }: SearchProps) {
   return (
     <div>
       <p>Search</p>
-      <SearchInput label={"First Name"} onChange={onChange} name="firstName" />
+      <div className="flex gap-4">
+     <SearchInput label={"First Name"} onChange={onChange} name="firstName" />
       <SearchInput label={"Last Name"} onChange={onChange} name="lastName" />
       <SearchInput label={"City"} onChange={onChange} name={"city"} />
       <SearchInput label={"Degree"} onChange={onChange} name="degree" />
@@ -19,11 +20,13 @@ export default function SearchBar({ onChange, onClickReset }: SearchProps) {
         name="Specialties"
       />
       <SearchInput
-        label={"Years of Experience"}
+        label={"Years of Experience (min)"}
         type={"number"}
         name="yearsOfExperience"
         onChange={onChange}
       />
+      </div>
+ 
       <button onClick={onClickReset}>Reset Search</button>
     </div>
   );
