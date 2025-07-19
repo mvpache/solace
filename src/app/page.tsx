@@ -2,6 +2,7 @@
 
 import { ChangeEvent, useEffect, useState } from "react";
 import { Advocate } from "./models/advocate";
+import Search from "./components/search";
 
 export default function Home() {
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
@@ -48,14 +49,7 @@ export default function Home() {
       <h1>Solace Advocates</h1>
       <br />
       <br />
-      <div>
-        <p>Search</p>
-        <p>
-          Searching for: <span id="search-term"></span>
-        </p>
-        <input style={{ border: "1px solid black" }} onChange={onChange} />
-        <button onClick={onClick}>Reset Search</button>
-      </div>
+        <Search onChange={onChange} onClickReset={onClick} />
       <br />
       <br />
       <table>
