@@ -8,9 +8,11 @@
 ## TODOS
 
 - [x] Hydration error on load
-- [ ] We double call api/advocates on load
 - [x] Missing Key in list
 - [x] Advocate Type errors
-- [ ] We are setting innerHTML
 - [ ] Design Refresh
-- [ ] Individual search fields
+- [x] Search Upgrade
+  - [x] We are setting innerHTML for the search field instead of managing in state
+  - [x] Search is agaisnt the advocates list in state, this will become unperformant as we add more advocates to the db, make an api call for search
+  - [x] We should be able to search certain fields specifically, ie PhD in New York with 10 years of expierence or more
+  - [ ] Stretch: Add a debounce to search inputs so we dont search until 2secs of inactivty

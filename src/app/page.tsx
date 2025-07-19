@@ -2,45 +2,103 @@
 
 import { ChangeEvent, useEffect, useState } from "react";
 import { Advocate } from "./models/advocate";
+import SearchBar from "./components/searchBar";
+import { on } from "events";
 
 export default function Home() {
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
-  const [filteredAdvocates, setFilteredAdvocates] = useState<Advocate[]>([]);
+  const [firstNameSearch, setFirstNameSearch] = useState("");
+  const [lastNameSearch, setLastNameSearch] = useState("");
+  const [citySearch, setCitySearch] = useState("");
+  const [degreeSearch, setDegreeSearch] = useState("");
+  const [specialtiesSearch, setSpecialtiesSearch] = useState("");
+  const [yearsOfExperienceSearch, setYearsOfExperienceSearch] = useState(0);
 
   useEffect(() => {
     console.log("fetching advocates...");
+    fetchAdvocates();
+  }, []);
+
+  useEffect(() => {
+    console.log("fetching advocates...");
+    let queryParams = "?";
+    if (firstNameSearch.length > 0) {
+      queryParams += `firstName=${firstNameSearch}&`;
+    }
+
+    if (lastNameSearch.length > 0) {
+      queryParams += `lastName=${lastNameSearch}&`;
+    }
+
+    if (citySearch.length > 0) {
+      queryParams += `city=${citySearch}&`;
+    }
+
+    if (degreeSearch.length > 0) {
+      queryParams += `degree=${degreeSearch}&`;
+    }
+
+    if (specialtiesSearch.length > 0) {
+      queryParams += `specialties=${specialtiesSearch}&`;
+    }
+
+    if (yearsOfExperienceSearch > 0) {
+      queryParams += `yearsOfExperience=${yearsOfExperienceSearch}&`;
+    }
+
+    if (queryParams.length > 1) {
+      fetch(`/api/advocates${queryParams}`).then((response) => {
+        response.json().then((jsonResponse) => {
+          setAdvocates(jsonResponse.data);
+        });
+      });
+    }
+  }, [
+    firstNameSearch,
+    lastNameSearch,
+    citySearch,
+    degreeSearch,
+    specialtiesSearch,
+    yearsOfExperienceSearch,
+  ]);
+
+  const fetchAdvocates = () => {
     fetch("/api/advocates").then((response) => {
       response.json().then((jsonResponse) => {
         setAdvocates(jsonResponse.data);
-        setFilteredAdvocates(jsonResponse.data);
       });
     });
-  }, []);
-
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const searchTerm = e.target.value;
-
-    document.getElementById("search-term").innerHTML = searchTerm;
-
-    console.log("filtering advocates...");
-    const filteredAdvocates = advocates.filter((advocate) => {
-      return (
-        advocate.firstName.includes(searchTerm) ||
-        advocate.lastName.includes(searchTerm) ||
-        advocate.city.includes(searchTerm) ||
-        advocate.degree.includes(searchTerm) ||
-        advocate.specialties.includes(searchTerm) 
-        // TODO: Once we have individual search fields, make sure years of expierence is searchable
-        // || advocate.yearsOfExperience.includes(searchTerm)
-      );
-    });
-
-    setFilteredAdvocates(filteredAdvocates);
   };
 
-  const onClick = () => {
+  const onClickReset = () => {
     console.log(advocates);
-    setFilteredAdvocates(advocates);
+    fetchAdvocates();
+  };
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    switch (name) {
+      case "firstName":
+        setFirstNameSearch(value);
+        break;
+      case "lastName":
+        setLastNameSearch(value);
+        break;
+      case "city":
+        setCitySearch(value);
+        break;
+      case "degree":
+        setDegreeSearch(value);
+        break;
+      case "Specialties":
+        setSpecialtiesSearch(value);
+        break;
+      case "yearsOfExperience":
+        setYearsOfExperienceSearch(parseInt(value));
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -48,30 +106,23 @@ export default function Home() {
       <h1>Solace Advocates</h1>
       <br />
       <br />
-      <div>
-        <p>Search</p>
-        <p>
-          Searching for: <span id="search-term"></span>
-        </p>
-        <input style={{ border: "1px solid black" }} onChange={onChange} />
-        <button onClick={onClick}>Reset Search</button>
-      </div>
+      <SearchBar onChange={onChange} onClickReset={onClickReset} />
       <br />
       <br />
       <table>
         <thead>
           <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>City</th>
-          <th>Degree</th>
-          <th>Specialties</th>
-          <th>Years of Experience</th>
-          <th>Phone Number</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>City</th>
+            <th>Degree</th>
+            <th>Specialties</th>
+            <th>Years of Experience</th>
+            <th>Phone Number</th>
           </tr>
         </thead>
         <tbody>
-          {filteredAdvocates.map((advocate) => {
+          {advocates.map((advocate) => {
             return (
               <tr key={advocate.id}>
                 <td>{advocate.firstName}</td>
