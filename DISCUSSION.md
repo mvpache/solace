@@ -10,9 +10,18 @@
 - [x] Hydration error on load
 - [x] Missing Key in list
 - [x] Advocate Type errors
-- [ ] Design Refresh
+- [x] Design Refresh
 - [x] Search Upgrade
   - [x] We are setting innerHTML for the search field instead of managing in state
   - [x] Search is agaisnt the advocates list in state, this will become unperformant as we add more advocates to the db, make an api call for search
   - [x] We should be able to search certain fields specifically, ie PhD in New York with 10 years of expierence or more
   - [ ] Stretch: Add a debounce to search inputs so we dont search until 2secs of inactivty
+
+
+## Would have done:
+
+- Would have loved to hit the debounce above
+- Also would ahve done a lot more styling tweaks, there are plenty of things to the searchbar and the table to make them look nicer and more modern
+- Same with the header and the overall page styling, some colors and a real logo would go a long way
+- Would have had the degree and speciality search be a drop down out of possible options
+- City could use a city api for search on real cities/auto complete
