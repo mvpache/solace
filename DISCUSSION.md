@@ -7,7 +7,7 @@
 
 ## TODOS
 
-- [ ] Hydration error on load
+- [x] Hydration error on load
 - [ ] We double call api/advocates on load
 - [x] Missing Key in list
 - [x] Advocate Type errors
