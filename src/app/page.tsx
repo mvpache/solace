@@ -42,6 +42,7 @@ export default function Home() {
       queryParams += `specialties=${specialtiesSearch}&`;
     }
 
+
     if (yearsOfExperienceSearch > 0) {
       queryParams += `yearsOfExperience=${yearsOfExperienceSearch}&`;
     }
@@ -109,13 +110,13 @@ export default function Home() {
       <SearchBar onChange={onChange} onClickReset={onClickReset} />
       <br />
       <br />
-      <table>
+      <table className="w-full border-spacing-2">
         <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
+          <tr className="border-b">
+            <th className="min-w-28 text-left">First Name</th>
+            <th className="min-w-28 text-left">Last Name</th>
             <th>City</th>
-            <th>Degree</th>
+            <th className="min-w-16">Degree</th>
             <th>Specialties</th>
             <th>Years of Experience</th>
             <th>Phone Number</th>
@@ -124,18 +125,18 @@ export default function Home() {
         <tbody>
           {advocates.map((advocate) => {
             return (
-              <tr key={advocate.id}>
+              <tr key={advocate.id} className="border-b">
                 <td>{advocate.firstName}</td>
                 <td>{advocate.lastName}</td>
                 <td>{advocate.city}</td>
-                <td>{advocate.degree}</td>
-                <td>
+                <td className="text-center">{advocate.degree}</td>
+                <td className="flex flex-wrap gap-x-2">
                   {advocate.specialties.map((specialty, index) => (
-                    <div key={index}>{specialty}</div>
+                    <div key={index}>{specialty}{index < advocate.specialties.length - 1 ? ", " : ""}</div>
                   ))}
                 </td>
-                <td>{advocate.yearsOfExperience}</td>
-                <td>{advocate.phoneNumber}</td>
+                <td className="text-center">{advocate.yearsOfExperience}</td>
+                <td className="min-w-36 text-center">{advocate.phoneNumber.toString().slice(0, 3) + "-" + advocate.phoneNumber.toString().slice(3, 6) + "-" + advocate.phoneNumber.toString().slice(6, 10)}</td>
               </tr>
             );
           })}

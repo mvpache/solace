@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import db from "../../../db";
 import { advocates } from "../../../db/schema";
-import { and, arrayContains, gt, ilike } from "drizzle-orm";
+import { and, arrayContains, gte, ilike } from "drizzle-orm";
 
 interface queryParams {
   firstName?: string;
@@ -9,7 +9,7 @@ interface queryParams {
   city?: string;
   degree?: string;
   specialties?: string;
-  yearsOfExpierence?: number;
+  yearsOfExperience?: number;
 }
 
 export async function GET(req: NextRequest) {
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
   const city = searchParams.get("city");
   const degree = searchParams.get("degree");
   const specialties = searchParams.get("specialties");
-  const yearsOfExpierence = searchParams.get("yearsOfExpierence");
+  const yearsOfExperience = searchParams.get("yearsOfExperience");
 
   const filters = [];
 
@@ -41,8 +41,8 @@ export async function GET(req: NextRequest) {
   if (specialties) {
     filters.push(arrayContains(advocates.specialties, `%${specialties}%`));
   }
-  if (yearsOfExpierence) {
-    filters.push(gt(advocates.yearsOfExperience, Number(yearsOfExpierence)));
+  if (yearsOfExperience && parseInt(yearsOfExperience) > 0) {
+    filters.push(gte(advocates.yearsOfExperience, parseInt(yearsOfExperience)));
   }
 
   if (filters.length === 0) {
