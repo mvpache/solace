@@ -2,13 +2,18 @@
 
 import { ChangeEvent, useEffect, useState } from "react";
 import { Advocate } from "./models/advocate";
-import Search from "./components/search";
+import SearchBar from "./components/searchBar";
+import { on } from "events";
 
 export default function Home() {
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
   const [filteredAdvocates, setFilteredAdvocates] = useState<Advocate[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
-
+  const [firstNameSearch, setFirstNameSearch] = useState("");
+  const [lastNameSearch, setLastNameSearch] = useState("");
+  const [citySearch, setCitySearch] = useState("");
+  const [degreeSearch, setDegreeSearch] = useState("");
+  const [specialtiesSearch, setSpecialtiesSearch] = useState("");
+  const [yearsOfExperienceSearch, setYearsOfExperienceSearch] = useState(0);
 
   useEffect(() => {
     console.log("fetching advocates...");
@@ -20,28 +25,61 @@ export default function Home() {
     });
   }, []);
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-
+  useEffect(() => {
     console.log("filtering advocates...");
     const filteredAdvocates = advocates.filter((advocate) => {
       return (
-        advocate.firstName.includes(searchTerm) ||
-        advocate.lastName.includes(searchTerm) ||
-        advocate.city.includes(searchTerm) ||
-        advocate.degree.includes(searchTerm) ||
-        advocate.specialties.includes(searchTerm) 
-        // TODO: Once we have individual search fields, make sure years of expierence is searchable
-        // || advocate.yearsOfExperience.includes(searchTerm)
+        advocate.firstName.includes(firstNameSearch) ||
+        advocate.lastName.includes(lastNameSearch) ||
+        advocate.city.includes(citySearch) ||
+        advocate.degree.includes(degreeSearch) ||
+        advocate.specialties.includes(specialtiesSearch) ||
+        advocate.yearsOfExperience >= yearsOfExperienceSearch
       );
     });
 
-    setFilteredAdvocates(filteredAdvocates);
-  };
+    console.log(filteredAdvocates)
 
-  const onClick = () => {
+    setFilteredAdvocates(filteredAdvocates);
+  }, [
+    firstNameSearch,
+    lastNameSearch,
+    citySearch,
+    degreeSearch,
+    specialtiesSearch,
+    yearsOfExperienceSearch,
+    advocates,
+  ]);
+
+  const onClickReset = () => {
     console.log(advocates);
     setFilteredAdvocates(advocates);
+  };
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    switch (name) {
+      case "firstName":
+        setFirstNameSearch(value);
+        break;
+      case "lastName":
+        setLastNameSearch(value);
+        break;
+      case "city":
+        setCitySearch(value);
+        break;
+      case "degree":
+        setDegreeSearch(value);
+        break;
+      case "Specialties":
+        setSpecialtiesSearch(value);
+        break;
+      case "yearsOfExperience":
+        setYearsOfExperienceSearch(parseInt(value));
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -49,19 +87,19 @@ export default function Home() {
       <h1>Solace Advocates</h1>
       <br />
       <br />
-        <Search onChange={onChange} onClickReset={onClick} />
+      <SearchBar onChange={onChange} onClickReset={onClickReset} />
       <br />
       <br />
       <table>
         <thead>
           <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>City</th>
-          <th>Degree</th>
-          <th>Specialties</th>
-          <th>Years of Experience</th>
-          <th>Phone Number</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>City</th>
+            <th>Degree</th>
+            <th>Specialties</th>
+            <th>Years of Experience</th>
+            <th>Phone Number</th>
           </tr>
         </thead>
         <tbody>
