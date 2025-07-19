@@ -13,3 +13,4 @@
 - [ ] Advocate Type errors
 - [ ] We are setting innerHTML
 - [ ] Design Refresh
+- [ ] Individual search fields
