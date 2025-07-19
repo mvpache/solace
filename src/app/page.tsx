@@ -6,6 +6,8 @@ import { Advocate } from "./models/advocate";
 export default function Home() {
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
   const [filteredAdvocates, setFilteredAdvocates] = useState<Advocate[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
 
   useEffect(() => {
     console.log("fetching advocates...");
@@ -18,9 +20,7 @@ export default function Home() {
   }, []);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const searchTerm = e.target.value;
-
-    document.getElementById("search-term").innerHTML = searchTerm;
+    setSearchTerm(e.target.value);
 
     console.log("filtering advocates...");
     const filteredAdvocates = advocates.filter((advocate) => {
